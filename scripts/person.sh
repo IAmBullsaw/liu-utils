@@ -9,7 +9,20 @@ function usage() {
 ### Functions
 
 function mail() {
-    echo "mail"
+    KEYS=$1
+    VALS=$2
+    keymail=email_strict
+    END=${#KEYS[@]}
+    for ((i=0;i<=END;i++)); do
+        key=${KEYS[i]}
+        val=${VALS[i]}
+
+        if [ "$key" == "$keymail" ]; then
+            echo $val;
+            break;
+        fi
+
+    done
 }
 
 function tele() {
@@ -43,16 +56,25 @@ NAME="$1"
 SURNAME="$2"
 
 # perform request
-URL="https://search.liu.se/jellyfish/rest/apps/LiU/searchers/sitecore2_people_only?query=$NAME+$SURNAME&lang=sv"
-RES=`curl -L $URL`
+url="https://search.liu.se/jellyfish/rest/apps/LiU/searchers/sitecore2_people_only?query=$NAME+$SURNAME&lang=sv"
+#RES=$(curl -sL $URL)
 
+KEYS=()
+VALS=()
 
-
-
-
+while read line; do
+    # row=$(echo $line | grep 'strict')
+    if [[ ${#line} -ge 4 ]]; then
+        key=$(echo $line | cut -d':' -f1)
+        key=$(echo ${key:1:-2})
+        value=$(echo $line | cut -d':' -f2)
+        KEYS+=($key)
+        VALS+=($value)
+    fi
+done < <(curl -sL $url /dev/null)
 
 # present info
 for command in ${commandarray[@]}
 do
-    $command
+    $command $KEYS $VALS
 done
