@@ -30,7 +30,7 @@ function help() {
 # MAIN SCRIPT FLOW
 
 # Get options
-while getopts 'bsShFiuv' flag; do
+while getopts 'h' flag; do
     case "${flag}" in
         h) HELP=true ;;
         *) { error "Unexpected option $(flag)"; exit -1; } ;;
