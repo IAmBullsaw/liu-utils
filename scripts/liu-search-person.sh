@@ -33,7 +33,6 @@ function search_mail() {
 [ $# -gt 0 ] || { usage; exit -1; }
 
 # Get options and call functions accordingly
-commandarray=()
 while getopts ':m:h' flag; do
     case "${flag}" in
         m) 
