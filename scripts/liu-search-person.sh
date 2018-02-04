@@ -23,9 +23,12 @@ function help() {
 
 ### Functions
 
-function search_mail() {
-    url="https://search.liu.se/jellyfish/rest/apps/LiU/searchers/sitecore2_people_only?query=$@&lang=sv"
-    awk -F"[:\"]" '/email_strict/{printf("%s\n", $5)}' <(curl -L $url 2> /dev/null)
+function search() {
+    regex=$1
+    shift
+    searchterm=$@
+    url="https://search.liu.se/jellyfish/rest/apps/LiU/searchers/sitecore2_people_only?query=$searchterm&lang=sv"
+    awk -F"[:\"]" '/'"$regex"'/{printf("%s\n", $5)}' <(curl -L $url 2> /dev/null)
 }
 
 ### Main program flow
@@ -33,11 +36,22 @@ function search_mail() {
 [ $# -gt 0 ] || { usage; exit -1; }
 
 # Get options and call functions accordingly
-while getopts ':m:h' flag; do
+regex=''
+while getopts 'mht' flag; do
     case "${flag}" in
-        m) 
-            search_mail ${OPTARG} ;;
-        h) help ;;
+        h) HELP=true ;;
+        m) regex+='email_strict|';;
+        t) regex+='phone_strict|';;
         *) { error "Unexpected option $(flag)"; exit -2; } ;;
     esac
 done
+shift $((OPTIND-1)) # Eat options!
+
+# Print help
+if [ $HELP ]; then
+    help;
+    exit 0;
+fi
+
+searchterm=$@
+search ${regex::-1} $searchterm
