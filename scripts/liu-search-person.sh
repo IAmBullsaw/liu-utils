@@ -17,7 +17,8 @@ function help() {
             -m Print email"
     echo ""
     echo "EXAMPLE
-            $0 -m 'marco kuhlman'"
+            $0 -m 'marco kuhlman'
+            $0 -mt 'marco'"
     echo ""
 }
 
