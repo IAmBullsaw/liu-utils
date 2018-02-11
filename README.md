@@ -1,8 +1,7 @@
 # liu-utils
 Some helper scripts for students at LiU
 
-*Working scripts are found in scripts folder*
-*In work scripts are found in wip folder*
+_Working scripts are found in scripts folder_ and _scripts work in progress are found in wip folder_
 
 ## person.py
 This is a script which can give you information about staff at LiU.
@@ -32,7 +31,7 @@ Hus Täppan, rum 6008, Campus Norrköping
 ```
 
 searching for 'marco kuhlmann'.
-Script exits on exakt name match
+Script exits on exact name match
 
 ```bash
 foo@bar:~$ ./person.py marco kuhlmann
