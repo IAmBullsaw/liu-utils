@@ -38,6 +38,14 @@ def get_request(args):
 def is_exact_match(name, names):
     return name.lower() == ' '.join(names).lower()
 
+# TODO: do we want a less strict match system?
+def is_close_match(name, names):
+    first, last, *_ = name.split()
+    if len(names) > 1:
+        return first.lower() == names[0].lower() and last.lower()[:len(names[1])] == names[1].lower()
+    else:
+        return first.lower() == names[0].lower()
+
 
 # Relates only to get_room()
 class MyHTMLParser(HTMLParser):
@@ -80,6 +88,7 @@ def main():
             results -= 1
             if results < 0:
                 break
+
             for key in keys:
                 if key == 'room':
                     if 'liu_id' in person.keys():
@@ -90,8 +99,13 @@ def main():
                     if key in person.keys():
                         tmp = person[key]
                         print(tmp[0] if key == 'phone_strict' else tmp)
+            # if is_close_match(person['full_name_strict'], args.names):
+            #     print('CLOSE MATCH')
             if 'full_name_strict' in person.keys() and is_exact_match(person['full_name_strict'], args.names):
                 break
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('Stopped',file=sys.stderr)
