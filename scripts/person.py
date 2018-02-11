@@ -82,13 +82,15 @@ def main():
                 break
             for key in keys:
                 if key == 'room':
-                    print(get_room(person['liu_id']))
-                try:
-                    tmp = person[key]
-                    print(tmp[0] if key == 'phone_strict' else tmp)
-                except:
-                    continue
-            if is_exact_match(person['full_name_strict'], args.names):
+                    if 'liu_id' in person.keys():
+                        print(' '.join(get_room(person['liu_id'])))
+                    else:
+                        print('No Room Found', file=sys.stderr)
+                else:
+                    if key in person.keys():
+                        tmp = person[key]
+                        print(tmp[0] if key == 'phone_strict' else tmp)
+            if 'full_name_strict' in person.keys() and is_exact_match(person['full_name_strict'], args.names):
                 break
 
 if __name__ == '__main__':
